@@ -26,7 +26,7 @@ def createPixelMatrix():
             a = xMin + col * xRange / width
             b = yMax - row * yRange / height
             c = [a,b]
-            if helpers.cMag(c)>2:
+            if helpers.cMag(c)>=2:
                 M[col][row] = 0
             else:
                 M[col][row] = helpers.computeEscapeTimeMandelbrot(c,bound,pixelSize)

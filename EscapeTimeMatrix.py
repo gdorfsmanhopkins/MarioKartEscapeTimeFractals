@@ -24,7 +24,7 @@ def createPixelMatrix(c):
             a = xMin + col * xRange / width
             b = yMax - row * yRange / height
             z = [a,b]
-            if helpers.cMag(z)>2:
+            if helpers.cMag(z)>=2:
                 M[col][row] = 0
             else:
                 M[col][row] = helpers.computeEscapeTimeJulia(z,c,bound,pixelSize)
