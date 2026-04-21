@@ -60,6 +60,8 @@ if __name__=="__main__":
     for i in range(width):
         for j in range(height):
             ETMatrix[i][j] = helpers.redistribute(ETMatrix[i][j],LpNorm)
+            #ETMatrix[i][j] = helpers.redistributeSigmoid(ETMatrix[i][j],.25,5)
+
 
     print("Making the Frames!")
     Path(output_dir).mkdir(exist_ok=True)

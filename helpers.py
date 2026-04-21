@@ -97,3 +97,13 @@ def computeEscapeTimeMandelbrot(c,bound,pixelSize):
 def redistribute(x,n):
     #Circular
     return((1 - (1-x)**n)**(1/n))
+
+def sigmoid(x,c):
+    return 1/(1+math.exp(-1*(x-c)))
+
+def shift(x,b):
+    return 2*b*x-b
+
+#This will take the sigmoid on [-b,b] to [0,1], shifting in such a way that the center lands at c.
+def redistributeSigmoid(x,c,b):
+    return sigmoid(shift(x,b),shift(c,b))

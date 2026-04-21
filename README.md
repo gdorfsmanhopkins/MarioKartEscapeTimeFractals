@@ -161,7 +161,11 @@ All called scripts use this function automatically, but if you're trying to crea
 
 **Note:** changing n is inaccessable from the wrapper, you will need to create a json file first and then feed the LpNorm to one of `MatrixToFrames` or `SingleFrame`.
 
-**TODO:**  This really only slows down the beginning or the end.  I'd be interested in writing a redistribution function which allows us to slow down over a particular interval of interest to us.  Maybe control points for a cubic or a simoid type thing.
+**TODO:**  The circle approach only slows down the beginning or the end.  I'd be interested in writing a redistribution function which allows us to slow down over a particular interval of interest to us.  Maybe control points for a cubic or a sigmoid type thing.
+
+**TODO:**  I introduced a `redistributeSigmoid(x,c,b)` function which can be called by `matrixToFrames`.  This puts a sigmoid on `[0,1]`, whose center (i.e., largest slope) is at `c`.  `b` controls the bound of the sigmoid that gets squeezed into `[0,1]`.  Precisely, we take the usual sigmoid and squeeze `[-b,b]` to `[0,1]`, moving the center to `c`.  A higher `b` will be a more local and steeper slope at `c`.  Right now this function is inaccessable from the command line, you must goe into `matrixToFrames` and comment out the redistribute function you don't want to use.  I will update this soon.
+
+A good way to use `redistributeSigmoid` is to first create 100 frames with `redistribute` with `LpNorm=1` (or just adjust the code to skip redistribution altogether).  Then dig through your frames to find the place you'd like to stretch out vertically, divide this frame number by 100 and that will be a good `c` value for `redistributeSigmoid`.
 
 ## Output Directories
 
