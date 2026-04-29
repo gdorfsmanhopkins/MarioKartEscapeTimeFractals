@@ -2,6 +2,11 @@
 
 A Python project for generating animated visualizations of Julia and Mandelbrot sets using escape time algorithms. The project creates pixel matrices representing escape times, converts them into frame sequences, and assembles them into GIF animations.
 
+#### Authors
+
+- Eliza Brown
+- Gabriel Dorfsman-Hopkins
+
 ## Quick Start
 To quickly make a GIF for the Julia set of a complex number you choose, run `wrapper.py` to have all the core scripts run in sequence.
 ```
@@ -211,8 +216,3 @@ python png_to_gif.py ExampleColor Gifs/ExampleColor.gif 50
 - High-resolution matrices (e.g., 5000x5000) and large frame counts can be computationally intensive
 - Consider downscaling images or reducing frame numbers for faster processing
 - GIF creation is memory-intensive; optimize frame count and resolution accordingly
-
-## Authors
-
--Eliza Brown
--Gabriel Dorfsman-Hopkins
