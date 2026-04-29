@@ -212,6 +212,7 @@ python png_to_gif.py ExampleColor Gifs/ExampleColor.gif 50
 - Consider downscaling images or reducing frame numbers for faster processing
 - GIF creation is memory-intensive; optimize frame count and resolution accordingly
 
-## License
+## Authors
 
-[Add license information if applicable]
+-Eliza Brown
+-Gabriel Dorfsman-Hopkins
