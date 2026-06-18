@@ -10,7 +10,7 @@ import helpers
 if __name__=="__main__":
     import sys
     if len(sys.argv) < 4:
-        print("Usage: python SingleFram.py <input_dir> <output_dir> <NUM_FRAMES>")
+        print("Usage: python MatrixToFramesColor.py <input_dir> <output_dir> <NUM_FRAMES>")
         print("Optionally, one could also specify the Lp norm used for distribution (defaults to 2)")
         print("Optionally, one could also specify the number of loops through the color spectrum (defaults to 1)")
         sys.exit()

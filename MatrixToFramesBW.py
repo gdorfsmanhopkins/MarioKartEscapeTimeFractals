@@ -4,12 +4,10 @@ import math
 from pathlib import Path
 import helpers
 
-#Redistribute the numbers 0-->1 along a smooth curve
-
 if __name__=="__main__":
     import sys
     if len(sys.argv) < 4:
-        print("Usage: python SingleFram.py <input_dir> <output_dir> <NUM_FRAMES> <LpNorm (optional, for redistribution)>")
+        print("Usage: python MatrixToFramesBW.py <input_dir> <output_dir> <NUM_FRAMES> <LpNorm (optional, for redistribution)>")
         sys.exit()
     input_dir = sys.argv[1]
     output_dir = sys.argv[2]
@@ -28,8 +26,6 @@ if __name__=="__main__":
 
     #We will normalize the matrix to having values between 0 and 1, first linearly, and then redistributing using the function above
     ETMatrix = helpers.normalizeMatrix(ETMatrix,LpNorm)
-
-    print(ETMatrix)
 
     print("Making the Frames!")
     Path(output_dir).mkdir(exist_ok=True)
