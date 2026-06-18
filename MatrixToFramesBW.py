@@ -27,37 +27,15 @@ if __name__=="__main__":
 
 
     #We will normalize the matrix to having values between 0 and 1, first linearly, and then redistributing using the function above
-    height = len(ETMatrix[0])
-    width = len(ETMatrix)
+    ETMatrix = helpers.normalizeMatrix(ETMatrix,LpNorm)
 
-    biggest = ETMatrix[0][0]
-    smallest = ETMatrix[0][0]
-
-    print("Computing highest and lowest values")
-
-    for i in range(width):
-        for j in range(height):
-            biggest = max(biggest,ETMatrix[i][j])
-            smallest = min(smallest,ETMatrix[i][j])
-
-    print("Values range from",smallest,"to",biggest)
-
-    print("Normalizing the values")
-
-    for i in range(width):
-        for j in range(height):
-            ETMatrix[i][j] = (ETMatrix[i][j]-smallest)/(biggest-smallest)
-
-    print("Redistributing the values")
-
-    for i in range(width):
-        for j in range(height):
-            ETMatrix[i][j] = helpers.redistribute(ETMatrix[i][j],LpNorm)
-            #ETMatrix[i][j] = helpers.redistributeSigmoid(ETMatrix[i][j],.15,5)
-
+    print(ETMatrix)
 
     print("Making the Frames!")
     Path(output_dir).mkdir(exist_ok=True)
+
+    height = len(ETMatrix[0])
+    width = len(ETMatrix)
 
     img = Image.new('RGB', (width, height), color = 'white')
     pixels = img.load()

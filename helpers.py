@@ -107,3 +107,35 @@ def shift(x,b):
 #This will take the sigmoid on [-b,b] to [0,1], shifting in such a way that the center lands at c.
 def redistributeSigmoid(x,c,b):
     return sigmoid(shift(x,b),shift(c,b))
+
+#This function normalizes the escape time matrix to values between 0 and 1, then redistributes.  (Note LPNorm=1 will do no redistribution)
+def normalizeMatrix(ETMatrix, LpNorm):
+    height = len(ETMatrix[0])
+    width = len(ETMatrix)
+
+    biggest = ETMatrix[0][0]
+    smallest = ETMatrix[0][0]
+
+    print("Computing highest and lowest values")
+
+    for i in range(width):
+        for j in range(height):
+            biggest = max(biggest,ETMatrix[i][j])
+            smallest = min(smallest,ETMatrix[i][j])
+
+    print("Values range from",smallest,"to",biggest)
+
+    print("Normalizing the values")
+
+    for i in range(width):
+        for j in range(height):
+            ETMatrix[i][j] = (ETMatrix[i][j]-smallest)/(biggest-smallest)
+
+    print("Redistributing the values")
+
+    for i in range(width):
+        for j in range(height):
+            ETMatrix[i][j] = redistribute(ETMatrix[i][j],LpNorm)
+            #ETMatrix[i][j] = redistributeSigmoid(ETMatrix[i][j],.15,5)
+
+    return ETMatrix
