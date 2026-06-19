@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 if len(sys.argv) < 3:
-    print("Usage: python colorGif.py <c> <name> <NUM_FRAMES (optional)> <color (optional, True/False)> <Resolution (optional)>")
+    print("Usage: python wrapper.py <c> <name> <NUM_FRAMES (optional)> <color (optional, True/False)> <Resolution (optional)>")
     sys.exit(1)
 
 c = sys.argv[1]
