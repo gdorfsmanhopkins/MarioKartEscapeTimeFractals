@@ -7,7 +7,7 @@ from pathlib import Path
 
 if len(sys.argv) < 2:
     print("You must at least give a name to save as")
-    print("Usage: wrapperMandel.py <name> <center (optional, defaults to -.65)> <xRange (optional, defaults to 3)> <NUM_FRAMES (optional, defaults to 100)> <color (optional, True or False, defaults to True)> <resolution (optional, defaults to 1000)> <aspect ratio (optional, defaults to 4/3)>")
+    print("Usage: wrapperMandel.py <name> <center (optional, defaults to -.65)> <xRange (optional, defaults to 3)> <NUM_FRAMES (optional, defaults to 100)> <color (optional, True or False, defaults to True)> <resolution (optional, defaults to 1000)> <aspect ratio (optional, defaults to 4/3)> <bound (optional, defaults to 500)>")
     sys.exit(1)
 
 name = sys.argv[1]
