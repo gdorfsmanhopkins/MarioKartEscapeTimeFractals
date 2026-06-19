@@ -22,10 +22,6 @@ if __name__=="__main__":
     save_location = open(input_dir)
     ETMatrix = json.load(save_location)
 
-    for i in range(len(ETMatrix)):
-        for j in range(len(ETMatrix[i])):
-            ETMatrix[i][j] = min(ETMatrix[i][j],100)
-
     #We will normalize the matrix to having values between 0 and 1, first linearly, and then redistributing using the function above
     ETMatrix = helpers.normalizeMatrix(ETMatrix,LpNorm)
 
@@ -142,8 +138,8 @@ if __name__=="__main__":
     # 5. Show and/or Export the file
     # ==========================================
 
-    #This shows in the built in trimesh viewer.
-    solid_mesh.show()
+    #This commented line shows the result in the built in trimesh viewer.
+    #solid_mesh.show()
     
     print("Exporting....")
     solid_mesh.export(output_dir)
