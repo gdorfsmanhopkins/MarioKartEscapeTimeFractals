@@ -6,19 +6,25 @@ import numpy as np
 if __name__=="__main__":
     import sys
     if len(sys.argv)<3:
-        print("Usage: python MatrixToSTL.py <input_dir> <output_dir> <LpNorm (optional, for redistribution)> <base height (optional)")
+        print("Usage: python MatrixToSTL.py <input_dir> <output_dir> <mountain --or-- hole (optional, defaults to mountain)> <LpNorm (optional, for redistribution)>")
     input_dir = sys.argv[1]
     output_dir = sys.argv[2]
     LpNorm = 2
+    base_height = -.05
     if len(sys.argv)>3:
-        LpNorm = float(sys.argv[3])
-    base_height = -0.1  # The flat bottom altitude of your print block
+        if sys.argv[3]!='mountain':
+            base_height = .55
+
     if len(sys.argv)>4:
-        base_height = float(sys.argv[4])
+        LpNorm = float(sys.argv[4])
 
     print("Loading Heightmap...")
     save_location = open(input_dir)
     ETMatrix = json.load(save_location)
+
+    for i in range(len(ETMatrix)):
+        for j in range(len(ETMatrix[i])):
+            ETMatrix[i][j] = min(ETMatrix[i][j],100)
 
     #We will normalize the matrix to having values between 0 and 1, first linearly, and then redistributing using the function above
     ETMatrix = helpers.normalizeMatrix(ETMatrix,LpNorm)
@@ -37,7 +43,7 @@ if __name__=="__main__":
     y = np.linspace(0,1,rows)
     xx,yy = np.meshgrid(x,y)
 
-    zz = np.array(ETMatrix)
+    zz = .5*np.array(ETMatrix)
 
     #Now flatten and use column stack to turn into a set of triples.  These are your vertices.
     vert = np.column_stack((xx.flatten(),yy.flatten(),zz.flatten()))
@@ -53,9 +59,9 @@ if __name__=="__main__":
     bottom_left = grid_indices[1:, :-1].flatten()
     bottom_right = grid_indices[1:, 1:].flatten()
 
-    #From here we can form two triangles for every index
-    tri1 = np.column_stack((top_left,bottom_left,top_right))
-    tri2 = np.column_stack((top_right,bottom_left,bottom_right))
+    #From here we can form two triangles for every index.  Winding order should face up.
+    tri1 = np.column_stack((top_left,top_right,bottom_left))
+    tri2 = np.column_stack((top_right,bottom_right,bottom_left))
 
     #Since these are just lists of triangles given from vertex indices (which correspond to vert), we can make them our face list.
     top_faces = np.vstack((tri1,tri2))
@@ -72,7 +78,7 @@ if __name__=="__main__":
     #All vertices are either on the top or the bottom
     vertices = np.vstack((vert,bottom_vert))
 
-    #To make the mesh, let's just use the same triangulation as the top.
+    #To make the mesh, let's just use the same triangulation as the top.  Reversing top_faces winding order to make sure it points down.
     bottom_faces = top_faces[:,::-1]+bottom_start
 
 
@@ -89,7 +95,7 @@ if __name__=="__main__":
     left_edge = grid_indices[:, 0][::-1]
 
     # Combine into a continuous loop around the perimeter
-    boundary_indices = np.concatenate([top_edge[:-1], right_edge[:-1], bottom_edge[:-1], left_edge])
+    boundary_indices = np.concatenate([top_edge[:-1], right_edge[:-1], bottom_edge[:-1], left_edge[:-1]])
     bottom_boundary_indices = boundary_indices + bottom_start
 
     num_boundary_pts = len(boundary_indices)
@@ -119,10 +125,27 @@ if __name__=="__main__":
     # Instantiate Trimesh object
     solid_mesh = trimesh.Trimesh(vertices=vertices, faces=all_faces)
 
-    # Verify the object is completely sealed and 3D printable
+    #If we're digging a hole, we need the normals pointing outward.
+    if base_height>0:
+        solid_mesh.invert()
 
+
+    # Verify the object is completely sealed and 3D printable
     print(f"Is watertight solid: {solid_mesh.is_watertight}")
-    print(f"Is watertight winding consistently: {solid_mesh.is_winding_consistent}")
-    print(len(solid_mesh.outline().entities))
+    print(f"Is winding consistently: {solid_mesh.is_winding_consistent}")
+
+    # If the volume is negative, normals are inverteed
+    print(f"Volume: {solid_mesh.volume}")
+
+
+    # ==========================================
+    # 5. Show and/or Export the file
+    # ==========================================
+
+    #This shows in the built in trimesh viewer.
     solid_mesh.show()
+    
+    print("Exporting....")
+    solid_mesh.export(output_dir)
+    print("Done!")
 
