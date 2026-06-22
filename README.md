@@ -1,19 +1,68 @@
 # Mario Kart Escape Time Fractals
 
-A Python project for generating animated visualizations of Julia and Mandelbrot sets using escape time algorithms. The project creates pixel matrices representing escape times, converts them into frame sequences, and assembles them into GIF animations.
+A Python project for generating animated visualizations and 3D models of Julia and Mandelbrot sets using escape time algorithms. The project creates pixel matrices representing escape times.  It can then convert them into frame sequences, and assembles them into GIF animations.  It can also convert them directly into 3D printable STLs, where heights represent escape times.
 
 #### Authors
 
 - Eliza Brown
 - Gabriel Dorfsman-Hopkins
 
-## Quick Start
-To quickly make a GIF for the Julia set of a complex number you choose, run `wrapper.py` to have all the core scripts run in sequence.
+## Quick Start: 3D Models
+To quickly make a 3D model for the Julia set of a complex number you choose, run `wrapperSTL.py` to have all the necessary core scripts run in sequence.
+```
+python wrapperSTL.py <c> <name>
+```
+**Arguments:**
+- `c`: Complex parameter defining the Julia set.  $a+bi$ is stored as an array `[a,b]`
+- `name`: Your GIF will be stored as `name.gif` in the `Gifs` directory
+
+**Example**
+Run the following:
+```
+python wrapperSTL.py [-.75,0] example
+```
+It will create create a 3D model in STL format for the basilica Julia set for $c=-0.75+0i$ and save it as `/3DModels/example.stl`.
+
+**Optional Arguments**
+The wrapper also has some optional arguments:
+```
+python wrapperSTL.py <c> <name> <mountain --or-- hole> <Resolution> <max_iter>
+```
+- `mountain --or-- hole`. Choose `mountain` to build a vertical mountain, where height is escape time.  Choose `hole` to dig a hole, where depth is escape time.  Defaults to `mountain`.
+- `resolution` is the number of pixels.  It defaults to 1000 (as a 1000x1000 pixel square).
+- <max_iter> The escape time bound.  Might want to increase for nice zooms.  Defaults to 100.
+
+**Example**
+Run the following:
+```
+python wrapperSTL.py [-.75,0] holeExample hole
+```
+As above, it will create create a 3D model in STL format for the basilica Julia set for $c=-0.75+0i$ and save it as `/3DModels/holeExample.stl`, but this time as a hole.
+
+### Mandelbrot Wrapper
+There is also a quickstart wrapper to create Mandelbrot set 3D models.  If you run
+```
+python wrapperSTLMandel.py MandelExample
+```
+it will create a 3D model for the entire Mandelbrot set and save it as `3DModels/MandelExample.stl`.  There are a lot more optional arguments in this wrapper to make zooming more accessable.  All of these arguments are available in the Julia framework as well, though not accessable from the wrapper.
+```
+python wrapperMandel.py <name> <mountain --or hole> <center> <xRange> <resolution> <aspect ratio> <bound>
+```
+**Optional Arguments**
+- `center`: Center point of image (Defaults to -.65)
+- `mountain --or-- hole`. Choose `mountain` to build a vertical mountain, where height is escape time.  Choose `hole` to dig a hole, where depth is escape time.  Defaults to `mountain`.
+- `xRange`: Visible real range of the complex plane (defaults to 3)
+- `resolution`: The number of pixels in the x-direction.  Defaults to 1000.
+- `Aspect ratio`: Defaults to 4/3
+- `bound`: The escape time bound.  Might want to increase for nice zooms.  Defaults to 100.
+
+## Quick Start: Animations
+To quickly make a GIF for the Julia set of a complex number you choose, run `wrapper.py` to have all the necessary core scripts run in sequence.
 ```
 python wrapper.py <c> <name>
 ```
 **Arguments:**
-- `c`: Complex parameter defining the Julia set.  a+bi is stored as an array `[a,b]`
+- `c`: Complex parameter defining the Julia set.  $a+bi$ is stored as an array `[a,b]`
 - `name`: Your GIF will be stored as `name.gif` in the `Gifs` directory
 
 **Example**
@@ -21,7 +70,7 @@ Run the following:
 ```
 python wrapper.py [-.75,0] example
 ```
-It will create create a GIF for the basilica Julia set for c=-0.75+0i and save it as `/Gifs/example.gif`.
+It will create create a GIF for the basilica Julia set for $c=-0.75+0i$ and save it as `/Gifs/example.gif`.
 
 **Optional Arguments**
 The wrapper also has some optional arguments:
@@ -29,7 +78,7 @@ The wrapper also has some optional arguments:
 python wrapper.py <c> <name> <num_frames> <color> <resolution>
 ```
 - `num_frames` is the number of frames.  Defaults to 100.
-- `color` is a boolean.  Full color is the default, but for static animations for 3D printing you will need black and white (so choose `False`).
+- `color` is a boolean.  Full color is the default.
 - `resolution` is the number of pixels.  It defaults to 1000 (as a 1000x1000 pixel square).
 
 ### Mandelbrot Wrapper
@@ -45,10 +94,10 @@ python wrapperMandel.py <name> <center> <xRange> <NUM_FRAMES> <color> <resolutio
 - `center`: Center point of image (Defaults to -.65)
 - `xRange`: Visible real range of the complex plane (defaults to 3)
 - `NUM_FRAMES`: NUmber of frames in animation (defaults to 100)
-- `color` is a boolean.  Full color is the default, but for static animations for 3D printing you will need black and white (so choose `False`).
+- `color` is a boolean.  Full color is the default.
 - `resolution`: The number of pixels in the x-direction.  Defaults to 1000.
 - `Aspect ratio`: Defaults to 4/3
-- `bound`: The escape time bound.  Might want to increase for nice zooms.  Defaults to 500.
+- `bound`: The escape time bound.  Might want to increase for nice zooms.  Defaults to 100.
 
 ## Core Scripts
 
@@ -63,7 +112,7 @@ python EscapeTimeMatrix.py <c> <ouptut_dir> <resolution> <escape_time_bound> <xR
 ```
 
 **Arguments:**
-- `c`: Complex parameter defining the Julia set.  a+bi is stored as an array [a,b]
+- `c`: Complex parameter defining the Julia set.  $a+bi$ is stored as an array [a,b]
 - `output_dir`: Directory to save the matrix as JSON
 - Optional `resolution`: How many pixels in the x-direction.  Defaults to 1000.
 - Optional `escape_time_bound`: An upper bound for how long a pixel has to escape.  Defaults to 500.
@@ -85,6 +134,24 @@ python EscapeTimeMatrixMandel.py <output_dir> <center> <xRange> <resolution> <as
 - Optional `resolution`: How many pixels in the x-direction.  Defaults to 1000.
 - Optional `aspect_ratio`: The aspect ratio of the images produced.  Defaults to 4/3.
 - Optional `escape_time_bound`: An upper bound for how long a pixel has to escape.  Defaults to 500.
+
+### Creating a 3D model from a Pixel Matrix
+
+#### `MatrixToSTL.py`
+Converts an escape time matrix into 3D model as an STL, which is water tight and 3D printable.  It will either be a *mountain* where height corresponds to escape time, or a *hole* where depth corresponds to escape time.  This currently just exports an STL, but you can uncomment `    solid_mesh.show()` to show the 3D model in the built in trimesh viewer rather than exporting the entire model.
+
+
+**Usage:**
+```
+python MatrixToSTL.py <input_dir> <output_dir> <mountain --or -- hole> <LpNorm>
+```
+
+**Arguments:**
+- `input_dir`: Directory containing the escape time matrix JSON
+- `output_dir`: Directory to save PNG frames
+- Option `mountain --or-- hole`: Choose `mountain` to build a vertical mountain, where height is escape time.  Choose `hole` to dig a hole, where depth is escape time.  Defaults to `mountain`.
+- Optional `LpNorm`:  Chooses the norm for the the redistribution/renormalization of escape times.  See redistribution below.  Defaults to 2.
+
 
 ### Creating Frames from a Pixel Matrix
 
@@ -162,7 +229,7 @@ The value n is the LpNorm given as an optional argument to `MatrixToFrames` and 
 
 This function takes an input $x\in[0,1]$ and maps it to $(1-(1-x)^n)^{1/n}$ where n=LpNorm.  This is used to renormalize the interval `[0,1]`, which we think of as escape times along the circle centered at (1,0) in the specified LpNorm.  `n>1` slows down the beginning of the the animation and speeds up the end.  `0<n<1` speeds up the beginning of the animation and slows down the end.
 
-All called scripts use this function automatically, but if you're trying to create a nice 3D print, you may want to create the JSON file and then experiment with `MatrixToFramesBW` calling different values of n = LpNorm to get the effect you want.  You will likely want larger values to avoid spikeyness.
+All called scripts use this function automatically, but if you're trying to create a nice 3D print, you may want to create the JSON file and then experiment with `MatrixToSTL` calling different values of n = LpNorm to get the effect you want.  You will likely want larger values to avoid spikeyness.
 
 **Note:** changing n is inaccessable from the wrapper, you will need to create a json file first and then feed the LpNorm to one of `MatrixToFrames` or `SingleFrame`.
 
@@ -180,8 +247,33 @@ A good way to use `redistributeSigmoid` is to first create 100 frames with `redi
 
 ## Requirements
 
-- Python 3.x
-- Pillow (PIL) library for image processing
+- Python 3.8+ (3.10 recommended)
+- See [requirements.txt](requirements.txt) for project dependencies (`numpy`, `pillow`, `trimesh`, `scipy`, `pyglet`, `PyOpenGL`).
+- The STL generation itself does not require `pyglet` or `PyOpenGL`.  These packages are only needed for the optional `trimesh` viewer (`mesh.show()`).
+
+Installation (pip / venv)
+
+Create and activate a virtual environment, then install dependencies:
+```powershell
+python -m venv venv
+venv\Scripts\activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+Conda alternative
+
+If you prefer conda:
+```powershell
+conda create -n mke python=3.10
+conda activate mke
+pip install -r requirements.txt
+```
+
+Notes
+
+- The `trimesh` viewer depends on `pyglet` and `PyOpenGL`; if the optional viewer fails to start on Windows, ensure your graphics drivers are up to date.
+- If you need accelerated numerical routines, consider installing optimized builds of `numpy`/`scipy` (via conda or wheels).
 
 ## Usage Examples
 
@@ -194,18 +286,26 @@ python EscapeTimeMatrix.py [-0.7,0.27015] PixelMatrices/matrix.json 500
 ```
 python SingleFrame.py PixelMatrices/matrix.json Images/test_frame.png
 ```
+3. Generate a 3D model (as a mountain)
+```
+python MatrixToSTL.py PixelMatrices/matrix.json 3DModels/test_model.stl
+```
+4. Generate a 3D model (as a hole)
+```
+python MatrixToSTL.py PixelMatrices/matrix.json 3DModels/test_model_hole.stl hole
+```
 
-3. Create black and white frames:
+4. Create black and white frames:
 ```
 python MatrixToFramesBW.py PixelMatrices/matrix.json ExampleBW 100
 ```
 
-4. Create color frames:
+5. Create color frames:
 ```
 python MatrixToFramesColor.py PixelMatrices/matrix.json ExampleColor 100 2
 ```
 
-5. Convert frames to GIF:
+6. Convert frames to GIF:
 ```
 python png_to_gif.py ExampleColor Gifs/ExampleColor.gif 50
 ```
