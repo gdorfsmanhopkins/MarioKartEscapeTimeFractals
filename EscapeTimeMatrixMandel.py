@@ -59,7 +59,7 @@ if __name__ == "__main__":
     if l>3:
         xRange = float(sys.argv[3])
     if l>4:
-        resolution = int(sys.argv[4])
+        width = int(sys.argv[4])
     if l>5:
         aspectRatio = float(Fraction(sys.argv[5]))
     if l>6:
